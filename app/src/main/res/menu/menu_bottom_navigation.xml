@@ -4,26 +4,22 @@
     <item
         android:id="@+id/nav_item_home"
         android:title="Home"
-        android:icon="@mipmap/school_syllabus"
+        android:icon="@mipmap/ic_home"
         app:showAsAction="ifRoom" />
     <!-- android:icon="@mipmap/house"-->
 
 
     <item
         android:id="@+id/nav_item_notes"
-        android:title="Notes"
-        android:icon="@mipmap/concepts"
+        android:title="Community"
+        android:icon="@mipmap/ic_community"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nav_item_test"
-        android:icon="@mipmap/online_test"
-        android:title="Online Test"
+        android:icon="@mipmap/ic_book"
+        android:title="Profile"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/nav_item_book"
-        android:icon="@mipmap/online_test"
-        android:title="Reference Book"
-        app:showAsAction="ifRoom" />
+
 </menu>

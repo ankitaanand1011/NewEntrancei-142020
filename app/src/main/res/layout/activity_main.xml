@@ -28,18 +28,7 @@
         <include layout="@layout/activity_main_drawer" />
     </LinearLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="@dimen/_180sdp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorAccent"
-        android:fitsSystemWindows="true"
-        android:visibility="gone"
-        app:itemTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

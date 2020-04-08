@@ -9,51 +9,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar"
         android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+        <include
+            android:id="@+id/toolbar_lay"
+            layout="@layout/toolbar" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/blue_gradient"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <include layout="@layout/content_main" />
 
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:layout_alignParentEnd="true"
-        app:backgroundTint="@color/white"
-        android:visibility="gone"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorAccent"
-        app:rippleColor="@color/pressed_color_tv"
-        tools:ignore="RelativeOverlap" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/blue_gradient"
-        app:itemIconTint="@color/white"
+        android:layout_height="?actionBarSize"
+        app:backgroundColor="@color/colorPrimary"
         android:layout_alignParentBottom="true"
-
-        app:itemTextColor="@color/white"
-        app:menu="@menu/menu_bottom_navigation" />
+        app:iconSize="@dimen/_18sdp"
+        app:textSize="@dimen/_11sdp"
+        app:menu="@menu/menu_bottom_navigation"/>
 
 </RelativeLayout>

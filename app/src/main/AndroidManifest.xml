@@ -30,7 +30,7 @@
         </activity>
 
         <activity android:name=".ui.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ShopHopAppTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,24 +40,24 @@
         </activity>
 
         <activity android:name=".ui.LoginScreen"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"
             />
         <activity android:name=".ui.Signup2"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.Signup1"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.Signup3"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name=".ui.ForgotPasswordScreen"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.ResetPasswordScreen"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
 
     </application>

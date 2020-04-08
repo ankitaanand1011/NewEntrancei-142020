@@ -2,28 +2,46 @@ package com.exam.entranceinew.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.exam.entranceinew.ApplicationConstants;
+import com.exam.entranceinew.GlobalClass;
 import com.exam.entranceinew.MainActivity;
 import com.exam.entranceinew.R;
+import com.exam.entranceinew.Shared_Preference;
+import com.exam.entranceinew.ViewDialog;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginScreen extends AppCompatActivity {
-    TextView login_tv, signup_tv, tv_forgot_password;
+    TextView submit_tv_password, signup_tv, tv_forgot_password;
     String TAG = "login";
-   /* GlobalClass globalClass;
-    Shared_Prefrence shared_prefrence;
-    CatLoadingView mView;*/
-    EditText email_edt,password_edt;
-
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.+[a-z]";
-    LinearLayout ll_mobile,ll_email;
+    GlobalClass globalClass;
+    Shared_Preference shared_preference;
+    
+    ViewDialog mView;
+    EditText email_edt,password_edt,mobile_edt,otp_edt;
+    TextView tv_otp,tv_password,get_otp_tv,submit_otp_tv;
+    EditText input_layout_otp;
+    CountryCodePicker ccp;
+    LinearLayout ll_gt_otp,ll_password,ll_otp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,23 +49,27 @@ public class LoginScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-/*
         globalClass = (GlobalClass)getApplicationContext();
-        shared_prefrence = new Shared_Prefrence(this);
-        shared_prefrence.loadPrefrence();
+        shared_preference = new Shared_Preference(this);
+        shared_preference.loadPrefrence();
 
-        mView = new CatLoadingView();
-        mView.setText("      Loading");*/
+        mView = new ViewDialog(this);
 
-
-
-        login_tv = findViewById(R.id.login_tv);
+        ccp =  findViewById(R.id.ccp);
         signup_tv = findViewById(R.id.signup_tv);
         tv_forgot_password = findViewById(R.id.tv_forgot_password);
         email_edt = findViewById(R.id.email_edt);
         password_edt = findViewById(R.id.password_edt);
-        ll_mobile = findViewById(R.id.ll_mobile);
-        ll_email = findViewById(R.id.ll_email);
+        ll_gt_otp = findViewById(R.id.ll_gt_otp);
+        ll_password = findViewById(R.id.ll_password);
+        mobile_edt = findViewById(R.id.mobile_edt);
+        otp_edt = findViewById(R.id.otp_edt);
+        tv_otp = findViewById(R.id.tv_otp);
+        tv_password = findViewById(R.id.tv_password);
+        get_otp_tv = findViewById(R.id.get_otp_tv);
+        ll_otp = findViewById(R.id.ll_otp);
+        submit_otp_tv = findViewById(R.id.submit_otp_tv);
+        submit_tv_password = findViewById(R.id.submit_tv_password);
 
 
       /*  if(globalClass.getLogin_status()){
@@ -57,46 +79,6 @@ public class LoginScreen extends AppCompatActivity {
             finish();
         }*/
 
-        login_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Intent intent = new Intent(LoginScreen.this, MainActivity.class);
-                startActivity(intent);
-            /*    Intent intent = new Intent(LoginScreen.this, Dashboard.class);
-                startActivity(intent);
-
-
-
-                if (globalClass.isNetworkAvailable()){
-
-                    if(!email_edt.getText().toString().trim().isEmpty()) {
-                        if (!password_edt.getText().toString().trim().isEmpty()) {
-                            if (email_edt.getText().toString().matches(emailPattern)) {
-                                checkLogin(email_edt.getText().toString(),password_edt.getText().toString());
-                            }else {
-
-                                Toasty.error(LoginScreen.this,"Invalid email address.",Toast.LENGTH_LONG,true).show();}
-
-                        }else {
-
-                            Toasty.warning(LoginScreen.this,"Please enter the password.",Toast.LENGTH_LONG,true).show();}
-                    }else {
-
-                        Toasty.warning(LoginScreen.this,"Please enter the email id.",Toast.LENGTH_LONG,true).show();}
-
-                }else {
-
-
-
-
-                    Toasty.info(LoginScreen.this,"Check your internet connection.",Toast.LENGTH_LONG,true).show();
-
-                }
-            }*/
-            }
-        });
 
         signup_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,39 +98,97 @@ public class LoginScreen extends AppCompatActivity {
         });
 
 
+        
+        get_otp_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(globalClass.isNetworkAvailable()) {
+                    if (!mobile_edt.getText().toString().trim().isEmpty()) {
+                        request_otp(mobile_edt.getText().toString());
+                    } else {
+                        Toast.makeText(LoginScreen.this, "Please enter the mobile number.", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(LoginScreen.this,  "Check your internet connection.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        submit_otp_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(globalClass.isNetworkAvailable()) {
+                    if (!mobile_edt.getText().toString().trim().isEmpty()) {
+                        if (!otp_edt.getText().toString().trim().isEmpty()) {
+                            validate_otp(mobile_edt.getText().toString(),otp_edt.getText().toString());
+                        } else {
+                            Toast.makeText(LoginScreen.this, "Please enter OTP.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(LoginScreen.this, "Please enter the mobile number.", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(LoginScreen.this,  "Check your internet connection.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        submit_tv_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(globalClass.isNetworkAvailable()) {
+                    if (!mobile_edt.getText().toString().trim().isEmpty()) {
+                        if (!password_edt.getText().toString().trim().isEmpty()) {
+                            login_using_password(mobile_edt.getText().toString(),password_edt.getText().toString());
+                        } else {
+                            Toast.makeText(LoginScreen.this, "Please enter password.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(LoginScreen.this, "Please enter the mobile number.", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(LoginScreen.this,  "Check your internet connection.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
     }
     public void onClick(View view) {
         switch (view.getId()) {
 
-         /*   case R.id.login_tv:
-                startActivity(new Intent(LoginScreen.this, MainActivity.class));
-
-                break;*/
-
             case R.id.tv_otp:
-                ll_mobile.setVisibility(View.VISIBLE);
-                ll_email.setVisibility(View.GONE);
+                ll_gt_otp.setVisibility(View.VISIBLE);
+                ll_password.setVisibility(View.GONE);
                 tv_forgot_password.setVisibility(View.GONE);
+                tv_otp.setBackgroundColor(getResources().getColor(R.color.blue_gradient));
+                tv_otp.setTextColor(getResources().getColor(R.color.white));
+
+                tv_password.setBackgroundColor(getResources().getColor(R.color.white));
+                tv_password.setTextColor(getResources().getColor(R.color.blue_gradient));
                 break;
 
-            case R.id.tv_email:
-                ll_mobile.setVisibility(View.GONE);
-                ll_email.setVisibility(View.VISIBLE);
+            case R.id.tv_password:
+                ll_gt_otp.setVisibility(View.GONE);
+                ll_password.setVisibility(View.VISIBLE);
                 tv_forgot_password.setVisibility(View.VISIBLE);
+
+                tv_password.setBackgroundColor(getResources().getColor(R.color.blue_gradient));
+                tv_password.setTextColor(getResources().getColor(R.color.white));
+
+                tv_otp.setBackgroundColor(getResources().getColor(R.color.white));
+                tv_otp.setTextColor(getResources().getColor(R.color.blue_gradient));
                 break;
-           /* case R.id.tv_forgot_password:
-                startActivity(new Intent(LoginScreen.this, ForgotPasswordScreen.class));
-                break;*/
+
         }
     }
-   /* private void checkLogin(final String email, final String password) {
+    
+    private void request_otp( final String mobile) {
         // Tag used to cancel the request
         final String tag_string_req = "req_login";
 
-        mView.show(getSupportFragmentManager(), "Loading..");
-        String url = ApplicationConstants.baseApi+"login";
+        mView.showDialog();
+        String url = ApplicationConstants.login_otp_request;
         try{
             StringRequest strReq = new StringRequest(Request.Method.POST,
                     url, new Response.Listener<String>(){
@@ -156,7 +196,7 @@ public class LoginScreen extends AppCompatActivity {
 
                 @Override
                 public void onResponse(String response) {
-                    Log.d(TAG, "Login Response: " + response);
+                    Log.d(TAG, "registration Response: " + response);
 
 
                     Gson gson = new Gson();
@@ -164,52 +204,37 @@ public class LoginScreen extends AppCompatActivity {
                     try {
 
                         JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                        String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                        String result = jobj.get("result").getAsString().replaceAll("\"", "");
                         String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
 
                         Log.d(TAG, "Message: "+message);
 
-                        if(status.equals("1")) {
+                        //if(status.equals("1")) {
+                        if(result.equals("true")) {
                             ///  showOptDialog(mobile);
-                            String username = jobj.get("username").getAsString().replaceAll("\"", "");
-                            String id = jobj.get("id").getAsString().replaceAll("\"", "");
-                            String email = jobj.get("email").getAsString().replaceAll("\"", "");
-                            String mobile = jobj.get("mobile").getAsString().replaceAll("\"", "");
-                            String profile_pic = jobj.get("profile_pic").getAsString().replaceAll("\"", "");
-                            String device_type = jobj.get("device_type").getAsString().replaceAll("\"", "");
-                            String device_id = jobj.get("device_id").getAsString().replaceAll("\"", "");
-                            String fcm_token = jobj.get("fcm_token").getAsString().replaceAll("\"", "");
+                            JsonObject data = jobj.getAsJsonObject("data");
+                            String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
+                            String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
 
-                            globalClass.setId(id);
-                            globalClass.setName(username);
-                            globalClass.setEmail(email);
+                            Log.d(TAG, "onResponse:request_key>>>> " + mobile);
+                            Log.d(TAG, "onResponse:request_token>>> " + country_code);
+
+                            //globalClass.setRequest_token(request_token);
                             globalClass.setPhone_number(mobile);
-                            globalClass.setProfle_image(profile_pic);
-
-                            globalClass.setLogin_status(true);
+                            shared_preference.savePrefrence();
 
 
-                            //shared_prefrence.savePrefrence();
-                            Intent intent = new Intent(LoginScreen.this, Dashboard.class);
+                            get_otp_tv.setVisibility(View.GONE);
+                            ll_otp.setVisibility(View.VISIBLE);
+                            mobile_edt.setEnabled(false);
+                            mView.hideDialog();
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onSuccess:id "+message);
+                        }else {
 
-
-                            startActivity(intent);
-                            finish();
-                            shared_prefrence.savePrefrence();
-                            mView.dismiss();
-
-
-
-                            Toasty.success(LoginScreen.this, message, Toast.LENGTH_SHORT, true).show();
-                            Log.d(TAG, "onSuccess:id "+id);
-                        }else if(status.equals("2") || status.equals("0")){
-                            String error = jobj.get("error").getAsString().replaceAll("\"", "");
-
-                            Log.d(TAG, "onResponse error: "+error);
-                            mView.dismiss();
-                            // FancyToast.makeText(LoginScreen.this,error,FancyToast.LENGTH_LONG,FancyToast.ERROR,true);
-                            Toasty.error(LoginScreen.this, error, Toast.LENGTH_LONG, true).show();
+                            mView.hideDialog();
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
                         }
 
 
@@ -225,10 +250,11 @@ public class LoginScreen extends AppCompatActivity {
                 @Override
 
                 public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Login Error: " + error.getMessage());
+                    Log.e(TAG, "registration Error: " + error.getMessage());
                     Toast.makeText(getApplicationContext(),
                             "Connection Error", Toast.LENGTH_LONG).show();
                     //  pd.dismiss();
+                    mView.hideDialog();
                 }
             }) {
 
@@ -237,11 +263,12 @@ public class LoginScreen extends AppCompatActivity {
                     // Posting parameters to login url
                     Map<String, String> params = new HashMap<>();
 
-                    params.put("email", email);
-                    params.put("password", password);
-                    params.put("device_type", "android");
-                    params.put("device_id", "");
-                    params.put("fcm_token", "");
+                    params.put("request_key", globalClass.getRequest_key());
+                    params.put("request_token", globalClass.getRequest_token());
+                    params.put("device", "mobile");
+                    params.put("mobile", mobile);
+                    params.put("country_code", ccp.getSelectedCountryCode());
+
 
 
                     return params;
@@ -249,17 +276,224 @@ public class LoginScreen extends AppCompatActivity {
 
             };
 
-            // Adding request to request queue
-     *//*   GlobalClass.getInstance().addToRequestQueue(strReq, tag_string_req);
-        strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 10, 1.0f));*//*
-            strReq.setShouldCache(false);// todo added this to remove cache from request
-            int TIME_OUT =5000;
-            strReq.setRetryPolicy(new DefaultRetryPolicy(TIME_OUT, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            globalClass.addToRequestQueue(LoginScreen.this, strReq, tag_string_req);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void validate_otp(final String mobile,final String otp) {
+        // Tag used to cancel the request
+        final String tag_string_req = "req_login";
+
+        mView.showDialog();
+        String url = ApplicationConstants.login_otp_validate;
+        try{
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    url, new Response.Listener<String>(){
+
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "registration Response: " + response);
+
+
+                    Gson gson = new Gson();
+
+                    try {
+
+
+                        JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                        String result = jobj.get("result").getAsString().replaceAll("\"", "");
+                        String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                        Log.d(TAG, "Message: "+message);
+
+                        //if(status.equals("1")) {
+                        if(result.equals("true")) {
+                            ///  showOptDialog(mobile);
+                            JsonObject data = jobj.getAsJsonObject("data");
+                            String token = data.get("token").getAsString().replaceAll("\"", "");
+                            String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
+                            String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
+
+                            Log.d(TAG, "onResponse:request_key>>>> " + mobile);
+                            Log.d(TAG, "onResponse:request_token>>> " + country_code);
+                            Log.d(TAG, "onResponse:token>>> " + token);
+
+                            //globalClass.setRequest_token(request_token);
+                            globalClass.setPhone_number(mobile);
+                            shared_preference.savePrefrence();
+
+
+                            get_otp_tv.setVisibility(View.GONE);
+                            ll_otp.setVisibility(View.VISIBLE);
+                            mobile_edt.setEnabled(true);
+
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onSuccess:id "+message);
+                            mView.hideDialog();
+                            Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                            intent.putExtra("token",token);
+                            startActivity(intent);
+
+                        }else{
+                            mView.hideDialog();
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
+                        }
+
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "registration Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            "Connection Error", Toast.LENGTH_LONG).show();
+                    //  pd.dismiss();
+                    mView.hideDialog();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<>();
+
+                    params.put("request_key", globalClass.getRequest_key());
+                    params.put("request_token", globalClass.getRequest_token());
+                    params.put("device", "mobile");
+                    params.put("mobile", mobile);
+                    params.put("country_code", ccp.getSelectedCountryCode());
+                    params.put("otp", otp);
+
+
+
+                    return params;
+                }
+
+            };
 
             globalClass.addToRequestQueue(LoginScreen.this, strReq, tag_string_req);
 
         }catch (Exception e){
             e.printStackTrace();
         }
-    }*/
+    }
+
+    private void login_using_password(final String mobile,final String password) {
+        // Tag used to cancel the request
+        final String tag_string_req = "req_login";
+
+        mView.showDialog();
+        String url = ApplicationConstants.login_using_password;
+        Log.d(TAG, "login_using_password:url>>>  "+url);
+        try{
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    url, new Response.Listener<String>(){
+
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "registration Response: " + response);
+
+
+                    Gson gson = new Gson();
+
+                    try {
+
+
+                        JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                        String result = jobj.get("result").getAsString().replaceAll("\"", "");
+                        String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                        Log.d(TAG, "Message: "+message);
+
+
+                        if(result.equals("true")) {
+                            JsonObject data = jobj.getAsJsonObject("data");
+                            String token = data.get("token").getAsString().replaceAll("\"", "");
+                            String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
+                            String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
+
+                            Log.d(TAG, "onResponse:request_key>>>> " + mobile);
+                            Log.d(TAG, "onResponse:request_token>>> " + country_code);
+                            Log.d(TAG, "onResponse:token>>> " + token);
+
+                            //globalClass.setRequest_token(request_token);
+                            globalClass.setPhone_number(mobile);
+                            shared_preference.savePrefrence();
+
+
+
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onSuccess:id "+message);
+                            mView.hideDialog();
+                            Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                            intent.putExtra("token",token);
+                            startActivity(intent);
+
+                        }else{
+                            mView.hideDialog();
+                            Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
+                        }
+
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "registration Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            "Connection Error", Toast.LENGTH_LONG).show();
+                    //  pd.dismiss();
+                    mView.hideDialog();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<>();
+
+                    params.put("request_key", globalClass.getRequest_key());
+                    params.put("request_token", globalClass.getRequest_token());
+                    params.put("device", "mobile");
+                    params.put("mobile", mobile);
+                    params.put("country_code", ccp.getSelectedCountryCode());
+                    params.put("password", password);
+
+
+                    Log.d(TAG, "getParams: "+params);
+
+                    return params;
+                }
+
+            };
+
+            globalClass.addToRequestQueue(LoginScreen.this, strReq, tag_string_req);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

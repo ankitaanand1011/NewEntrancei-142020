@@ -10,11 +10,11 @@ public class ApplicationConstants {
     public static final String registration_1 =  baseApi+"user-registration-step-one";
     public static final String class_list =  baseApi+"student-class-list";
     public static final String registration_2 = baseApi+"user-registration-step-two";
-    public static final String products_details = baseApi+"products/";
+    public static final String login_otp_request = baseApi+"user-login-request-otp";
     public static final String image_path = "http://organikunj.roundplay.com/media/catalog/product";
-    public static final String quote_id = baseApi+"carts/mine";
-    public static final String guest_cart_id = baseApi+"guest-carts";
-    public static final String guest_cart_items= baseApi+"guest-carts/";
+    public static final String login_otp_validate = baseApi+"user-login-validate-otp";
+    public static final String login_using_password = baseApi+"user-login-password";
+    public static final String reset_request_otp= baseApi+"user-password-reset-otp";
     public static final String add_to_cart = baseApi+"carts/mine/items";
     public static final String add_shiiping_address = baseApi+"carts/mine/estimate-shipping-methods";
     public static final String information = baseApi+"carts/mine/shipping-information";
