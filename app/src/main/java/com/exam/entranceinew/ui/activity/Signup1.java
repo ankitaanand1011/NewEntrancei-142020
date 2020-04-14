@@ -1,4 +1,4 @@
-package com.exam.entranceinew.ui;
+package com.exam.entranceinew.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

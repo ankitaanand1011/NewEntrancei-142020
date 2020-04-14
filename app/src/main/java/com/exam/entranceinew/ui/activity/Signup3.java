@@ -1,4 +1,4 @@
-package com.exam.entranceinew.ui;
+package com.exam.entranceinew.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;

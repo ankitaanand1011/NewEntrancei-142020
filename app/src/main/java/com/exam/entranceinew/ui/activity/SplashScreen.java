@@ -1,4 +1,4 @@
-package com.exam.entranceinew.ui;
+package com.exam.entranceinew.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.exam.entranceinew.ApplicationConstants;
 import com.exam.entranceinew.GlobalClass;
-import com.exam.entranceinew.MainActivity;
 import com.exam.entranceinew.R;
 import com.exam.entranceinew.Shared_Preference;
 import com.exam.entranceinew.ViewDialog;

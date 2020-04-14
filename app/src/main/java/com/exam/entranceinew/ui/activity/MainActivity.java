@@ -1,4 +1,4 @@
-package com.exam.entranceinew;
+package com.exam.entranceinew.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -26,8 +26,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.exam.entranceinew.ui.LoginScreen;
-import com.exam.entranceinew.ui.home.HomeFragment;
+import com.exam.entranceinew.GlobalClass;
+import com.exam.entranceinew.R;
+import com.exam.entranceinew.Shared_Preference;
+import com.exam.entranceinew.ViewDialog;
+import com.exam.entranceinew.ui.fragment.HomeFragment;
+import com.exam.entranceinew.ui.fragment.ProfileFragment;
+
 
 import java.util.Objects;
 
@@ -147,11 +152,10 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "onItemSelect: 1");
                 }else if(i==2){
-
+                    fragment = new ProfileFragment();
+                    loadFragment(fragment);
                     Log.d(TAG, "onItemSelect: 2");
-                }else if(i==3){
 
-                    Log.d(TAG, "onItemSelect: 3");
                 }
             }
         });

@@ -19,7 +19,7 @@
         tools:targetApi="m"
         android:fullBackupContent="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/ShopHopAppTheme">
             <intent-filter>
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.SplashScreen"
+        <activity android:name=".ui.activity.SplashScreen"
             android:theme="@style/ShopHopAppTheme">
 
             <intent-filter>
@@ -39,24 +39,28 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.LoginScreen"
+        <activity android:name=".ui.activity.LoginScreen"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"
             />
-        <activity android:name=".ui.Signup2"
+        <activity android:name=".ui.activity.Signup2"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ui.Signup1"
+        <activity android:name=".ui.activity.Signup1"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ui.Signup3"
+        <activity android:name=".ui.activity.Signup3"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.ForgotPasswordScreen"
+        <activity android:name=".ui.activity.ForgotPasswordScreen"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ui.ResetPasswordScreen"
+        <activity android:name=".ui.activity.ResetPasswordScreen"
+            android:theme="@style/ShopHopAppTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".ui.activity.ChangePasswordScreen"
             android:theme="@style/ShopHopAppTheme"
             android:windowSoftInputMode="stateHidden"/>
 

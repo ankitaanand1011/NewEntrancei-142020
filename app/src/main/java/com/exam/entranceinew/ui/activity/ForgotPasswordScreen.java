@@ -1,11 +1,10 @@
-package com.exam.entranceinew.ui;
+package com.exam.entranceinew.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,22 +27,28 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResetPasswordScreen extends AppCompatActivity {
-    String TAG = "reset";
+public class ForgotPasswordScreen extends AppCompatActivity {
+    String TAG = "forgot";
     GlobalClass globalClass;
     Shared_Preference shared_preference;
     ViewDialog mView;
     CountryCodePicker ccp;
-    EditText mobile_edt,otp_edt,edt_new_password,edt_confirm_password;
-    TextView get_otp_tv,submit_otp_tv;
-    LinearLayout ll_otp;
+    EditText mobile_edt;
+    TextView get_otp_tv;
+
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.reset_password);
+        setContentView(R.layout.forgot_password);
+        
+        
         initialize_views();
         functions();
-        
+
+       
+
+      
     }
 
     private void initialize_views() {
@@ -52,48 +57,24 @@ public class ResetPasswordScreen extends AppCompatActivity {
         shared_preference.loadPrefrence();
 
         mView = new ViewDialog(this);
-
+        
         ccp =  findViewById(R.id.ccp);
         mobile_edt = findViewById(R.id.mobile_edt);
-        otp_edt = findViewById(R.id.otp_edt);
-        ll_otp = findViewById(R.id.ll_otp);
         get_otp_tv = findViewById(R.id.get_otp_tv);
-        submit_otp_tv = findViewById(R.id.submit_otp_tv);
-        edt_new_password = findViewById(R.id.edt_new_password);
-        edt_confirm_password = findViewById(R.id.edt_confirm_password);
     }
 
     private void functions() {
-
-        mobile_edt.setEnabled(false);
-        mobile_edt.setText(globalClass.getPhone_number());
-        submit_otp_tv.setOnClickListener(new View.OnClickListener() {
+        get_otp_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(globalClass.isNetworkAvailable()) {
                     if (!mobile_edt.getText().toString().trim().isEmpty()) {
-                        if (!otp_edt.getText().toString().trim().isEmpty()) {
-                            if (!edt_new_password.getText().toString().trim().isEmpty()) {
-                                if (!edt_confirm_password.getText().toString().trim().isEmpty()) {
-                                    if(edt_confirm_password.getText().toString().matches(edt_new_password.getText().toString())){
-                                        validate_otp(mobile_edt.getText().toString(),otp_edt.getText().toString(),edt_new_password.getText().toString(),edt_confirm_password.getText().toString());
-                                    } else {
-                                        Toast.makeText(ResetPasswordScreen.this, "Password mismatch.", Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    Toast.makeText(ResetPasswordScreen.this, "Please enter confirm password.", Toast.LENGTH_LONG).show();
-                                }
-                            } else {
-                                Toast.makeText(ResetPasswordScreen.this, "Please enter new password.", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Toast.makeText(ResetPasswordScreen.this, "Please enter OTP.", Toast.LENGTH_LONG).show();
-                        }
+                        request_otp(mobile_edt.getText().toString());
                     } else {
-                        Toast.makeText(ResetPasswordScreen.this, "Please enter the mobile number.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ForgotPasswordScreen.this, "Please enter the mobile number.", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(ResetPasswordScreen.this,  "Check your internet connection.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ForgotPasswordScreen.this,  "Check your internet connection.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -101,15 +82,12 @@ public class ResetPasswordScreen extends AppCompatActivity {
 
     }
 
-
-
-    private void validate_otp(final String mobile,final String otp,final String password,final String confirm_password) {
+    private void request_otp( final String mobile) {
         // Tag used to cancel the request
         final String tag_string_req = "req_login";
 
         mView.showDialog();
-        String url = ApplicationConstants.login_otp_validate;
-        Log.d(TAG, "validate_otp: url>>> "+url);
+        String url = ApplicationConstants.reset_request_otp;
         try{
             StringRequest strReq = new StringRequest(Request.Method.POST,
                     url, new Response.Listener<String>(){
@@ -124,7 +102,6 @@ public class ResetPasswordScreen extends AppCompatActivity {
 
                     try {
 
-
                         JsonObject jobj = gson.fromJson(response, JsonObject.class);
                         String result = jobj.get("result").getAsString().replaceAll("\"", "");
                         String message = jobj.get("message").getAsString().replaceAll("\"", "");
@@ -136,34 +113,32 @@ public class ResetPasswordScreen extends AppCompatActivity {
                         if(result.equals("true")) {
                             ///  showOptDialog(mobile);
                             JsonObject data = jobj.getAsJsonObject("data");
-                            String token = data.get("token").getAsString().replaceAll("\"", "");
                             String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
                             String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
 
                             Log.d(TAG, "onResponse:request_key>>>> " + mobile);
                             Log.d(TAG, "onResponse:request_token>>> " + country_code);
-                            Log.d(TAG, "onResponse:token>>> " + token);
 
-                            //globalClass.setRequest_token(request_token);
                             globalClass.setPhone_number(mobile);
                             shared_preference.savePrefrence();
-
-
-                         /*   get_otp_tv.setVisibility(View.GONE);
-                            ll_otp.setVisibility(View.VISIBLE);*/
-                           // mobile_edt.setEnabled(true);
-
-                            Toast.makeText(ResetPasswordScreen.this, "", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onSuccess:id "+message);
                             mView.hideDialog();
-                            Intent intent = new Intent(ResetPasswordScreen.this, LoginScreen.class);
+                            Toast.makeText(ForgotPasswordScreen.this, message, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onSuccess:id "+message);
+                            Intent intent = new Intent(ForgotPasswordScreen.this, ResetPasswordScreen.class);
                             startActivity(intent);
                             finish();
 
+                            //globalClass.setRequest_token(request_token);
 
-                        }else{
+
+                           /* get_otp_tv.setVisibility(View.GONE);
+                            ll_otp.setVisibility(View.VISIBLE);
+                            mobile_edt.setEnabled(false);*/
+
+                        }else {
+
                             mView.hideDialog();
-                            Toast.makeText(ResetPasswordScreen.this, message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ForgotPasswordScreen.this, message, Toast.LENGTH_LONG).show();
                         }
 
 
@@ -197,22 +172,20 @@ public class ResetPasswordScreen extends AppCompatActivity {
                     params.put("device", "mobile");
                     params.put("mobile", mobile);
                     params.put("country_code", ccp.getSelectedCountryCode());
-                    params.put("otp", otp);
-                    params.put("password", password);
-                    params.put("confirm_password", confirm_password);
 
 
-                    Log.d(TAG, "getParams: "+params);
 
                     return params;
                 }
 
             };
 
-            globalClass.addToRequestQueue(ResetPasswordScreen.this, strReq, tag_string_req);
+            globalClass.addToRequestQueue(ForgotPasswordScreen.this, strReq, tag_string_req);
 
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.exam.entranceinew.ui;
+package com.exam.entranceinew.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.exam.entranceinew.ApplicationConstants;
 import com.exam.entranceinew.GlobalClass;
-import com.exam.entranceinew.MainActivity;
 import com.exam.entranceinew.R;
 import com.exam.entranceinew.Shared_Preference;
 import com.exam.entranceinew.ViewDialog;
@@ -83,7 +82,7 @@ public class LoginScreen extends AppCompatActivity {
         signup_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginScreen.this, Signup2.class);
+                    Intent intent = new Intent(LoginScreen.this, Signup1.class);
                 startActivity(intent);
             }
         });
@@ -318,14 +317,23 @@ public class LoginScreen extends AppCompatActivity {
                             String token = data.get("token").getAsString().replaceAll("\"", "");
                             String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
                             String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
+                            String email = data.get("email").getAsString().replaceAll("\"", "");
+                            String first_name = data.get("first_name").getAsString().replaceAll("\"", "");
+                            String last_name = data.get("last_name").getAsString().replaceAll("\"", "");
 
-                            Log.d(TAG, "onResponse:request_key>>>> " + mobile);
-                            Log.d(TAG, "onResponse:request_token>>> " + country_code);
+                            Log.d(TAG, "onResponse:email>>>> " + email);
+                            Log.d(TAG, "onResponse:last_name>>> " + last_name);
+                            Log.d(TAG, "onResponse:first_name>>> " + first_name);
                             Log.d(TAG, "onResponse:token>>> " + token);
 
-                            //globalClass.setRequest_token(request_token);
+
                             globalClass.setPhone_number(mobile);
+                            globalClass.setEmail(email);
+                            globalClass.setF_name(first_name);
+                            globalClass.setL_name(last_name);
+                            globalClass.setLogin_status(true);
                             shared_preference.savePrefrence();
+
 
 
                             get_otp_tv.setVisibility(View.GONE);
@@ -426,14 +434,23 @@ public class LoginScreen extends AppCompatActivity {
                             String token = data.get("token").getAsString().replaceAll("\"", "");
                             String mobile = data.get("mobile").getAsString().replaceAll("\"", "");
                             String country_code = data.get("country_code").getAsString().replaceAll("\"", "");
+                            String email = data.get("email").getAsString().replaceAll("\"", "");
+                            String first_name = data.get("first_name").getAsString().replaceAll("\"", "");
+                            String last_name = data.get("last_name").getAsString().replaceAll("\"", "");
 
-                            Log.d(TAG, "onResponse:request_key>>>> " + mobile);
-                            Log.d(TAG, "onResponse:request_token>>> " + country_code);
+                            Log.d(TAG, "onResponse:email>>>> " + email);
+                            Log.d(TAG, "onResponse:last_name>>> " + last_name);
+                            Log.d(TAG, "onResponse:first_name>>> " + first_name);
                             Log.d(TAG, "onResponse:token>>> " + token);
 
-                            //globalClass.setRequest_token(request_token);
+
                             globalClass.setPhone_number(mobile);
+                            globalClass.setEmail(email);
+                            globalClass.setF_name(first_name);
+                            globalClass.setL_name(last_name);
+                            globalClass.setLogin_status(true);
                             shared_preference.savePrefrence();
+
 
 
 

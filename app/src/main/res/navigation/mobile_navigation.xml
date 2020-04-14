@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/nav_item_home"
-        android:name="com.exam.entranceinew.ui.home.HomeFragment"
+        android:name="com.exam.entranceinew.ui.fragment.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_my_content"
-        android:name="com.exam.entranceinew.ui.home.HomeFragment"
+        android:name="com.exam.entranceinew.ui.fragment.HomeFragment"
         android:label="My Content"
         tools:layout="@layout/fragment_home" />
 
