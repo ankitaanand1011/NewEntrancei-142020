@@ -41,14 +41,7 @@ public class RvClassAdapter extends RecyclerView.Adapter<RvClassAdapter.ViewHold
     String token;
     String pos = "0";
     String TAG= "adapterclass";
-  /*  private final Integer[] category_img = new Integer[]{
-            R.drawable.cereals,
-            R.drawable.pulses_beans,
-            R.drawable.spices,
-            R.drawable.tea_coffee,
-            R.drawable.dry_fruits
 
-    };*/
 
     public RvClassAdapter(Context c, ArrayList<HashMap<String,String>> arr_category ,
                           TextView tv_create_account, ViewDialog mView, String token) {
@@ -159,6 +152,7 @@ public class RvClassAdapter extends RecyclerView.Adapter<RvClassAdapter.ViewHold
                             globalClass.setEmail(email);
                             globalClass.setF_name(first_name);
                             globalClass.setL_name(last_name);
+                            globalClass.setUser_token(token);
                             globalClass.setLogin_status(true);
                             shared_preference.savePrefrence();
 

@@ -11,29 +11,18 @@ public class ApplicationConstants {
     public static final String class_list =  baseApi+"student-class-list";
     public static final String registration_2 = baseApi+"user-registration-step-two";
     public static final String login_otp_request = baseApi+"user-login-request-otp";
-    public static final String image_path = "http://organikunj.roundplay.com/media/catalog/product";
     public static final String login_otp_validate = baseApi+"user-login-validate-otp";
     public static final String login_using_password = baseApi+"user-login-password";
     public static final String reset_request_otp= baseApi+"user-password-reset-otp";
-    public static final String add_to_cart = baseApi+"carts/mine/items";
-    public static final String add_shiiping_address = baseApi+"carts/mine/estimate-shipping-methods";
-    public static final String information = baseApi+"carts/mine/shipping-information";
-    public static final String update_qty = baseApi+"carts/mine/items/";
+    public static final String notes_list = baseApi+"notes-get-student-subject";
+    public static final String chapters_list = baseApi+"notes-get-chapter-list";
+    public static final String sub_chapter_list = baseApi+"notes-get-sub-chapter-list";
+    public static final String chapter_content = baseApi+"notes-get-chapter-content";
     public static final String delete_item = baseApi+"carts/mine/items/";
     public static final String payment = baseApi+"carts/mine/payment-information";
     public static final String change_password = baseApi+"customers/me/password";
     public static final String reset_password = baseApi+"customers/password";
     public static final String Indian_states = baseApi+"directory/countries/IN";
-  //  public static final String add_to_cart = baseApi+"http://organikunj.roundplay.com/rest/V1/carts/mine";
 
-
-   // public static final String customer_detail =  baseApi+"customers/me";
-
-   /* http://organikunj.roundplay.com/rest/V1/integration/customer/token
-    http://organikunj.roundplay.com/rest/V1/integration/customer/token*/
-
-
-   /*http://organikunj.roundplay.com/media/catalog/product/o/r/organic-white-basmati-rice-600x600.jpg*/
-    /*http://organikunj.roundplay.com/rest/V1/media/catalog/product/o/r/organic-white-basmati-rice-600x600.jpg*/
 
 }

@@ -32,6 +32,7 @@ public class GlobalClass extends Application {
     String survey_event_id;
     String fcm_token_val;
     String request_key, request_token;
+    String  user_token;
     private static RequestQueue mRequestQueue;
  //   private static RequestQueue mRequestQueue;
  public  <T> void addToRequestQueue(Context mContext, Request<T> request, String tag) {
@@ -147,6 +148,14 @@ public class GlobalClass extends Application {
 
     public void setUser_type(String user_type) {
         this.user_type = user_type;
+    }
+
+    public String getUser_token() {
+        return user_token;
+    }
+
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
     }
 
     public String getDevice_type() {

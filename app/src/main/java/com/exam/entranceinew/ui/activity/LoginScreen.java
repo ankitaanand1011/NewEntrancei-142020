@@ -331,6 +331,7 @@ public class LoginScreen extends AppCompatActivity {
                             globalClass.setEmail(email);
                             globalClass.setF_name(first_name);
                             globalClass.setL_name(last_name);
+                            globalClass.setUser_token(token);
                             globalClass.setLogin_status(true);
                             shared_preference.savePrefrence();
 
